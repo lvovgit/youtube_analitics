@@ -1,7 +1,7 @@
 import json
 import os
 
-import fixture as fixture
+
 # from googleapiclient import channel
 from googleapiclient.discovery import build
 
@@ -98,11 +98,42 @@ class Channel:
             self.__channel_id = value
 
 
-chnl1 = Channel('UC3n7MKHEwA9xXBErhXYZbMQ')
-chnl2 = Channel('UCglNYRt1fJ3RmDrWpVG1Bsg')
+class Video:
+    def __init__(self, video_id):
+        self.video_id = video_id
+        api_key: str = os.getenv('API_KEY')
+        youtube = build('youtube', 'v3', developerKey=api_key)
+        self.video = youtube.videos().list(id=video_id, part='snippet,statistics').execute()
+        self.video_name = self.video['items'][0]['snippet']['title']
+        self.views_count = self.video['items'][0]['statistics']['viewCount']
+        self.like_count = self.video['items'][0]['statistics']['likeCount']
+
+    def __str__(self):
+        return f'{self.video_name}'
+
+class PLVideo(Video):
+
+    def __init__(self, video_id, playlist_id):
+        super().__init__(video_id)
+        self.playlist_id = playlist_id
+        api_key: str = os.getenv('API_KEY')
+        youtube = build('youtube', 'v3', developerKey=api_key)
+        self.playlist = youtube.playlists().list(id=playlist_id, part='snippet').execute()
+        self.playlist_name = self.playlist['items'][0]['snippet']['title']
+    def __str__(self):
+        return f'{self.video_name} ({self.playlist_name})'
+
+
+
+# chnl1 = Channel('UC3n7MKHEwA9xXBErhXYZbMQ')
+# chnl2 = Channel('UCglNYRt1fJ3RmDrWpVG1Bsg')
 # chnl1.print_info()
 # print(chnl1.channel_title)
 # chnl1.channel_id = 'sdfdsf'
 # print(Channel.get_service())
 # print(chnl1.to_json())
 # print(chnl1 + chnl2)
+video1 = Video('9lO06Zxhu88')
+video2 = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
+print(video1)
+print(video2)
