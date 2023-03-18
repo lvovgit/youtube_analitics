@@ -1,5 +1,8 @@
-from func import Channel, Video, PLVideo, PlayList
-
+from youtube.basic import Basic
+from youtube.channel import Channel
+from youtube.playlist import PlayList
+from youtube.video import Video, PLVideo
+from errors.errors import YoutubeApiError
 def test_str():
     chnl1 = Channel('UC3n7MKHEwA9xXBErhXYZbMQ')
     chnl2 = Channel('UCglNYRt1fJ3RmDrWpVG1Bsg')
@@ -38,3 +41,7 @@ def test_cls_playlist():
     assert str(type(duration)) == "<class 'datetime.timedelta'>"
     assert str(duration.total_seconds()) == "13261.0"
     assert str(pl.show_best_video()) == 'https://www.youtube.com/watch?v=9Bv2zltQKQA'
+
+def test_instantiate_csv_error():
+    e = YoutubeApiError()
+    assert (str(e)) == "Неизвестная ошибка"
