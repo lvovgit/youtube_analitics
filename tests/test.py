@@ -42,6 +42,7 @@ def test_cls_playlist():
     assert str(duration.total_seconds()) == "13261.0"
     assert str(pl.show_best_video()) == 'https://www.youtube.com/watch?v=9Bv2zltQKQA'
 
-def test_instantiate_csv_error():
-    e = YoutubeApiError()
-    assert (str(e)) == "Неизвестная ошибка"
+def test_broken_video_id():
+    video2 = Video('9lO06Zxhu8')
+    assert video2.title == print(None)
+    assert video2.like_count == print(None)

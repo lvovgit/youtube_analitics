@@ -1,6 +1,8 @@
 import json
-from youtube.basic import Basic
+
 from errors.errors import YoutubeApiError
+from youtube.basic import Basic
+
 
 class Video(Basic):
     def __init__(self, video_id):
@@ -15,18 +17,20 @@ class Video(Basic):
         super().__init__()
         try:
             self.__video_id = video_id
+            #items = self.info_video.get('items')
             if self.info_video['items']:
                 self.__video_name = self.info_video['items'][0]['snippet']['title']
                 self.__views_count = self.info_video['items'][0]['statistics']['viewCount']
                 self.__like_count = self.info_video['items'][0]['statistics']['likeCount']
 
             else:
-                raise YoutubeApiError
+                self.__video_name = None
+                self.__views_count = None
+                self.__like_count = None
+
 
         except YoutubeApiError:
-            self.__video_name = None
-            self.__views_count = None
-            self.__like_count = None
+            print('Неизвестная ошибка')
 
     def __str__(self):
         return f'{self.__video_name}'
@@ -105,12 +109,6 @@ class PLVideo(Video, Basic):
         """Вывод информации о плейлисте на экран"""
         print(super().dict_to_json(data=self.playlist))
 
-    def check_video_in_playlist(self) -> str:
-        """Получение информации о нахождении видео в плейлисте"""
-        playlist = self.playlist_channel
-        music = []
-        for item in playlist['items']:
-            music.append(item['snippet']['title'])
-        if self.playlist_name in music:
-            return f"Видео '{self.title}' есть в плейлисте '{self.playlist_name}'"
-        return f"Видео '{self.title}' нет в плейлисте '{self.playlist_name}'"
+video1 = Video('9lO06Zxhu8')
+print(video1.title)
+print(video1.like_count)
